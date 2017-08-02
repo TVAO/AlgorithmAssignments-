@@ -1,0 +1,41 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{mathpazo}
+\usepackage{booktabs}
+\usepackage{microtype}
+
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{chains}
+\usetikzlibrary{decorations}
+
+\title{Word Ladders Report}
+\author{Thor V.A.N. Olesen and Jacob Møiniche}
+
+\begin{document}
+
+\maketitle
+
+\section{Results}
+
+Our implementation produces the expected results on all input– output file pairs, except words-50.txt. On input words-5757.txt, a shortest path is found for each word pair in the input.txt file. The shortest path from there to other of length 2 is the following:
+  \begin{quotation}there, ether, other	
+  \end{quotation}
+The shortest path from about to there of length 6 is the following: 
+  \begin{quotation}
+about, bouts, stout, tutor, utero, other, there
+  \end{quotation}
+
+Note: the program only supports file name "input.txt". Thus rename e.g. words-50.txt to "input.txt". 
+
+  \section{Implementation details}
+
+\subsection{Construction}The implementation builds a digraph by reading a given text file "input.txt" containing strings of five letters. Then the user is prompted for two words to search for. The application uses BFS to find the shortest path between the words and prints it out.
+\subsection{Running Time}
+To determine the running time, we need to first understand how the program creates a graph. First, all words are stored in a list called "nodes", which takes n time. Secondly, the list is sorted so that binary search can be used, which takes n*log(n) time. This operation is not regarded as part of the requirement because it is not involved in the creation of the graph. Thirdly, each word is split into five substrings, which are then sorted and used as keys in a HashTable. This HashTable holds indexes representing words, which have the same 4-combination substrings. The insertion takes 5N time - the index of the current word from the "nodes" list is added as a value in the bag for each of the five substring keys. These steps serve as a setup for the creation of the graph. For each word in the "nodes" list the last 4 characters are sorted and used as a lookup key in the HashTable. Each value for a given key returns a bag containing index of related words. 
+\linebreak
+Thus, the total running time is always linear because we create the table in linear time and find related nodes in linear time, which is approximately ~2N or O(N).
+\subsection{Sorted Combinations}Our build preprocesses the data to achieve linear time. In this way, it only takes constant time to find all nodes that meet the connection rule. We use a Hash Table mapping combinations of 4 letters to bags of nodes that contain those 4 letters. The combinations represent unique substrings extracted from the origin one. For each word in the input file, the program looks up the last four letters in the Hash Table and make edges to the associated nodes.
+
+\end{document}
